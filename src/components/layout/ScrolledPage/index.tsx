@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {styles} from './styles';
 
-export const Page = ({children}: PropsWithChildren) => {
+export const ScrolledPage = ({children}: PropsWithChildren) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <SafeAreaView style={styles.safeAreaView}>
