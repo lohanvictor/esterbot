@@ -6,6 +6,7 @@ import {
   renderBubble,
   renderComposer,
   renderInputToolbar,
+  renderMessageImage,
   renderSend,
 } from '../../components/Chat';
 
@@ -13,7 +14,7 @@ export const ChatView = () => {
   const [messages, _setMessages] = useState<IMessage[]>([]);
 
   useEffect(() => {
-    setMessages([defaultMessage]);
+    setMessages(defaultMessage);
   }, []);
 
   function setMessages(someMessages: IMessage[]): void {
@@ -36,6 +37,7 @@ export const ChatView = () => {
       renderComposer={renderComposer}
       renderSend={renderSend}
       renderAvatar={() => null}
+      renderMessageImage={props => renderMessageImage(props, () => null)}
       messagesContainerStyle={chatStyles.container}
     />
   );

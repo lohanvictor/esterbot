@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   Bubble,
   BubbleProps,
@@ -7,6 +7,7 @@ import {
   IMessage,
   InputToolbar,
   InputToolbarProps,
+  MessageImageProps,
   Send,
   SendProps,
   TimeProps,
@@ -68,6 +69,11 @@ const bubbleStyles = {
       backgroundColor: '#87BBA5',
       borderTopRightRadius: 0,
     },
+    image: {
+      height: 140,
+      width: 200,
+      borderRadius: 12,
+    },
   }),
   text: StyleSheet.create({
     common: {
@@ -96,6 +102,25 @@ export const renderBubble = (bubbleProps: BubbleProps<IMessage>) => {
       }}
       renderTime={renderTime}
     />
+  );
+};
+
+export const renderMessageImage = (
+  bubbleProps: MessageImageProps<IMessage>,
+  onClickImage: (uri: string) => void,
+) => {
+  const uri = bubbleProps.currentMessage?.image ?? '';
+  const {wrapper} = bubbleStyles;
+  return (
+    <View style={wrapper.image}>
+      <TouchableOpacity onPress={() => onClickImage(uri)}>
+        <Image
+          style={{width: 100, height: 100}}
+          source={{uri}}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+    </View>
   );
 };
 
