@@ -71,8 +71,8 @@ const bubbleStyles = {
     },
     image: {
       height: 140,
-      width: 200,
-      borderRadius: 12,
+      width: 232,
+      borderRadius: 8,
     },
   }),
   text: StyleSheet.create({
@@ -115,9 +115,9 @@ export const renderMessageImage = (
     <View style={wrapper.image}>
       <TouchableOpacity onPress={() => onClickImage(uri)}>
         <Image
-          style={{width: 100, height: 100}}
+          style={{width: '100%', height: 140}}
           source={{uri}}
-          resizeMode="contain"
+          resizeMode="cover"
         />
       </TouchableOpacity>
     </View>

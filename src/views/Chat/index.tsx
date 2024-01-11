@@ -9,6 +9,8 @@ import {
   renderMessageImage,
   renderSend,
 } from '../../components/Chat';
+import {useIsFocused} from '@react-navigation/native';
+import {Platform, StatusBar} from 'react-native';
 
 export const ChatView = () => {
   const [messages, _setMessages] = useState<IMessage[]>([]);
@@ -26,6 +28,19 @@ export const ChatView = () => {
   function onSend(aMessages: IMessage[]) {
     setMessages(aMessages);
   }
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      StatusBar.setHidden(false);
+      StatusBar.setBarStyle('light-content');
+      if (Platform.OS === 'android') {
+        StatusBar.setTranslucent(true);
+        StatusBar.setBackgroundColor('transparent');
+      }
+    }
+  }, [isFocused]);
 
   return (
     <GiftedChat
