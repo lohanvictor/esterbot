@@ -2,7 +2,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {HomeView} from './views/Home';
 import {ChatView} from './views/Chat';
-import {Header} from './components/Header';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -24,7 +23,7 @@ export const Routes = () => {
           name="Chat"
           component={ChatView}
           options={{
-            header: () => <Header title="Chat" />,
+            headerShown: false,
           }}
         />
       </Stack.Navigator>

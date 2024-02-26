@@ -1,9 +1,11 @@
 import {IMessage, User} from 'react-native-gifted-chat';
 
 export const userEsterBot: User = {
-  _id: 0,
+  _id: 1,
   name: 'Ester Bot',
 };
+
+export const ID_USER = 0;
 
 export const defaultMessage: IMessage[] = [
   {

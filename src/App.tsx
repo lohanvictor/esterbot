@@ -7,9 +7,14 @@
 
 import React from 'react';
 import {Routes} from './routes';
+import {ChatProvider} from './contexts/useChat';
 
 function App(): React.JSX.Element {
-  return <Routes />;
+  return (
+    <ChatProvider>
+      <Routes />
+    </ChatProvider>
+  );
 }
 
 export default App;
