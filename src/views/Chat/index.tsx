@@ -1,4 +1,4 @@
-import {GiftedChat} from 'react-native-gifted-chat';
+import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {ID_USER} from '../../constants/chat';
@@ -6,12 +6,14 @@ import {
   chatStyles,
   renderBubble,
   renderComposer,
+  renderEmptyInputToolbar,
   renderInputToolbar,
   renderMessageImage,
   renderSend,
 } from '../../components/Chat';
 import {useIsFocused} from '@react-navigation/native';
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   StatusBar,
@@ -23,6 +25,8 @@ import {useChat} from '../../contexts/useChat';
 import {styles} from './styles';
 import {RegularModal} from '../../components/RegularModal';
 import {Header} from '../../components/Header';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../routes';
 
 export interface EsterRequest {
   message: string;
@@ -39,11 +43,47 @@ export interface EsterMessage {
 
 type ModalTypes = 'finish' | 'none';
 
-export const ChatView = () => {
-  const {messages, onSend} = useChat();
+type HomeProps = NativeStackScreenProps<RootStackParamList>;
+
+export const ChatView = ({navigation}: HomeProps) => {
+  const {messages, send, finishChat, fetchMessages} = useChat();
   const isFocused = useIsFocused();
 
   const [currentModal, setCurrentModal] = useState<ModalTypes>('none');
+
+  const [modalIsLoading, setModalIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+
+  async function onFinishChat() {
+    try {
+      setModalIsLoading(true);
+      await finishChat();
+      await fetchMessages();
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      }
+    } catch {
+    } finally {
+      setModalIsLoading(false);
+    }
+  }
+
+  async function onNoFinishChat() {
+    if (modalIsLoading) {
+      return;
+    }
+    setCurrentModal('none');
+  }
+
+  async function onSend(aMessages: IMessage[]) {
+    try {
+      setIsSending(true);
+      await send(aMessages);
+    } catch (err) {
+    } finally {
+      setIsSending(false);
+    }
+  }
 
   useEffect(() => {
     if (isFocused) {
@@ -78,7 +118,9 @@ export const ChatView = () => {
           onSend={onSend}
           user={{_id: ID_USER}}
           renderBubble={renderBubble}
-          renderInputToolbar={renderInputToolbar}
+          renderInputToolbar={
+            isSending ? renderEmptyInputToolbar : renderInputToolbar
+          }
           renderComposer={renderComposer}
           renderSend={renderSend}
           renderAvatar={() => null}
@@ -94,7 +136,7 @@ export const ChatView = () => {
               </Text>
               <View style={styles.modalButtonWrapper}>
                 <TouchableOpacity
-                  onPress={() => setCurrentModal('none')}
+                  onPress={onNoFinishChat}
                   style={styles.modalButton}>
                   <Text
                     style={[styles.modalButtonText, styles.modalButtonTextNo]}>
@@ -102,12 +144,19 @@ export const ChatView = () => {
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => null}
+                  onPress={onFinishChat}
                   style={[styles.modalButton, {backgroundColor: '#2A5A48'}]}>
-                  <Text
-                    style={[styles.modalButtonText, styles.modalButtonTextYes]}>
-                    Sim
-                  </Text>
+                  {modalIsLoading ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text
+                      style={[
+                        styles.modalButtonText,
+                        styles.modalButtonTextYes,
+                      ]}>
+                      Sim
+                    </Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </View>

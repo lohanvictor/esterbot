@@ -133,6 +133,10 @@ const inputToolbarStyles = StyleSheet.create({
     alignItems: 'center',
     padding: 0,
   },
+  empty: {
+    backgroundColor: 'white',
+    height: 45,
+  },
 });
 
 export const renderInputToolbar = (
@@ -145,6 +149,13 @@ export const renderInputToolbar = (
       primaryStyle={inputToolbarStyles.primary}
     />
   );
+};
+
+export const renderEmptyInputToolbar = (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  toolbarProps: InputToolbarProps<IMessage>,
+) => {
+  return <View style={inputToolbarStyles.empty} />;
 };
 
 const composeStyles = StyleSheet.create({

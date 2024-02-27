@@ -1,4 +1,6 @@
 import {IMessage} from 'react-native-gifted-chat';
+import DeviceInfo from 'react-native-device-info';
+
 import {EsterMessage} from '.';
 
 export class ChatUtils {
@@ -16,5 +18,9 @@ export class ChatUtils {
         _id: Number(is_from_ester),
       },
     };
+  }
+
+  static async getDeviceId(): Promise<string> {
+    return DeviceInfo.getUniqueId();
   }
 }
